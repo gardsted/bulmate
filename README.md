@@ -1,4 +1,4 @@
-# bulmate 0.0.1
+# bulmate 0.0.2
 
 
 bulmate is a library for creation of server-rendered dynamic, responsive html-pages using bulma as the css library, dominate for tag-rendering, and cccp for the dynamic part, which consists of appending to live dom elements, prepending to live dom elements and replacing live dom elements using callbacks that fetch server rendered snippets. It uses the javascript libraries axios, jquery and fontawesome.
