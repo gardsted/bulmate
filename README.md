@@ -1,24 +1,27 @@
 # bulmate 0.0.1
 
 
-bulmate is a library for creation of server-rendered dynamic, responsive html-pages using bulma as the css library, dominate for tag-rendering and cccp for the dynamic part, which consists of appending to live dom elements, prepending to live dom elements and replacing live dom elements using callbacks that fetch server rendered snippets. It uses the javascript libraries axios, jquery and fortawesome.
+bulmate is a library for creation of server-rendered dynamic, responsive html-pages using bulma as the css library, dominate for tag-rendering, and cccp for the dynamic part, which consists of appending to live dom elements, prepending to live dom elements and replacing live dom elements using callbacks that fetch server rendered snippets. It uses the javascript libraries axios, jquery and fontawesome.
 
-For the dynamic superpowers of cccp, refer to that project's [excellent documentation and examples](https://github.com/sloev/cccp).
+For more of the superpowers of cccp, refer to that project's [excellent documentation and examples](https://github.com/sloev/cccp).
 
 In order to know more about how the inner dynamics of the tag rendering works, refer to the [brilliant documentation](https://github.com/Knio/dominate) of dominate.
 
 Finally Bulma. There is no way You can use this library effectively without reading some of the [extraordinarily bright bulma documentation](https://bulma.io/documentation/).
 
+## Responsive rendering
+
 An reasonably comprehensive example in a flask view could look like this - it will showcase **section**, **hero**, **columns**, and **tile**.
 
 
-It should render like this
+### The wide version
 
 
 ![](example-v0.0.1.png)
 
 
-And when pinched a bit in the browser like this:
+### The tall version
+
 
 
 ![](example-responsive-v0.0.1.png)
@@ -90,6 +93,115 @@ Here is the current code
     	    ]),
     	]),
         ]).render()
+
+## dynamic pages with server rendered snippets
+
+### A Shining example
+
+    import flask
+    import bulmate
+    import bulmate.tags as t
+    import cccp
+    import uuid
+    
+    app = flask.Flask(__name__)
+    
+    def column_jack(letter):
+        return t.column(
+            id="coll_"+letter,
+            cls=["is-primary", "has-text-centered"],
+            children = [
+                t.div(
+                    id="shine_" + letter,
+                ),
+                t.div(
+                    id="butt_" + letter,
+                    children= [
+                        t.button(
+                            cls=["is-warning"],
+                            onclick=[
+                                cccp.replaceHtml("/more_buttons/?letter="+letter, "butt_"+letter),
+                                cccp.appendHtml("/shine/", "shine_"+letter),
+                            ],
+                            children=["Add some shine"],
+                        ),
+                    ],
+                )
+            ])
+    
+    
+    @app.route('/shine/')
+    def shine():
+        return "All work and no play makes Jack a dull boy. " * 10
+    
+    
+    @app.route('/')
+    def index():
+        return t.html(
+            children=[
+        	    t.head([bulmate.init(cors=True)]),
+        	    t.body(
+                    children=[
+                        t.section(
+                            children=[t.columns([column_jack(letter) for letter in "jack"])]
+                        ),
+                    ],
+                ),
+            ]).render()
+    
+    
+    @app.route('/more_buttons/')
+    def more_buttons():
+        letter = flask.request.args["letter"]
+        return t.div(
+            children=[
+                t.button(
+                    cls=["is-danger"],
+                    onclick=cccp.appendHtml("/shine/", "shine_" + letter),
+                    children=["Add some more shine"],
+                ),
+                t.button(
+                    cls=["is-success"],
+                    onclick=[
+                        cccp.replaceHtml("/nothing/", "shine_" + letter),
+                        cccp.replaceHtml("/one_button/?letter=" + letter, "butt_" + letter),
+                    ],
+                    children=["Remove everything"],
+                ),
+            ]
+        ).render()
+    
+    @app.route('/one_button/')
+    def one_button():
+        letter = flask.request.args["letter"]
+        return t.div(
+            children= [
+                t.button(
+                    cls=["is-warning"],
+                    onclick=[
+                        cccp.replaceHtml("/more_buttons/?letter="+letter, "butt_"+letter),
+                        cccp.appendHtml("/shine/", "shine_" + letter)
+                    ],
+                    children=["Add some shine"],
+                ),
+            ],
+        ).render()
+    
+    
+    @app.route('/nothing/')
+    def nothing():
+        return t.comment("all has been deleted").render()
+    
+    
+    if __name__ == "__main__":
+        import os
+        app.run(debug=True, host=os.environ.get("HOST","127.0.0.1"))
+    
+    
+
+### Only the wide version shown
+
+![](example-dynamic-v0.0.2.png)
 
 ## rendered tags, alphabetically
 
@@ -220,7 +332,7 @@ The **bulmate.init** function is special, because it has no outer tag of it's ow
 
 ### button
 
-    <button></button>
+    <p class="button"></p>
 
 ### buttons
 
@@ -293,6 +405,10 @@ The **bulmate.init** function is special, because it has no outer tag of it's ow
 ### command
 
     <command>
+
+### comment
+
+    <!---->
 
 ### container
 
@@ -862,4 +978,14 @@ The **bulmate.init** function is special, because it has no outer tag of it's ow
 
     <wbr>
 
+
+## History
+
+### Version 0.0.2 - Mar 15, 2020
+
+ * typos, additional image, onclick as list possible, more docs, examples
+
+### Version 0.0.1 - Mar 15, 2020
+
+ * first
 

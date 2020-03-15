@@ -9,6 +9,11 @@ class html_tag(dom_tag, dom1core):
 
     def __init__(self, *args, **kwargs):
 
+        # onclick chaining in cccp needs mitigation 
+        onclick = kwargs.get("onclick", [])
+        if onclick and isinstance(onclick, list):
+            kwargs["onclick"] = ";".join([s for s in onclick]) + ";"
+
         # children should be a kwarg if so desired
         children = kwargs.pop("children", [])
         if isinstance(children, str):
@@ -79,7 +84,7 @@ bulmatespecific = {
     ],
     "p": [
         "panel_heading", "panel_tabs", "menu_label", "title", "subtitle",
-        "card_header_title", 
+        "card_header_title", "button",
     ],
     "a": [
         "panel_block","pagination_previous", "pagination_next", "pagination_link",

@@ -12,12 +12,14 @@ if os.environ.get("WRITE_BULMATE_ARTEFACTS",""):
     readme_in = testbase.parent / "README.in"
     readme_md = testbase.parent / "README.md"
     version = testbase.parent / "VERSION"
+    history = testbase.parent / "HISTORY"
+    shining = testbase.parent / "examples" / "example_dynamic.py"
     tagtests={}
     for thing in dir(t):
         attr = getattr(t, thing)
         if not getattr(attr, "__bases__", False):
             continue
-        if attr.__bases__ == (t.html_tag,):
+        if attr.__bases__ == (t.html_tag,) or thing == "comment":
             tagtests[thing] = attr().render(indent='')
     tagtests["init"] = bulmate.init().render(indent='')
     testdata.write_text(json.dumps(tagtests, indent=4))
@@ -34,8 +36,14 @@ if os.environ.get("WRITE_BULMATE_ARTEFACTS",""):
                 if tagname != "init"
             ])))
     readme_md.write_text(readme_in.read_text(
+    ).replace("THE_HISTORY", history.read_text()
     ).replace("THE_VERSION_STRING", version.read_text()
-    ).replace("THE_RENDERED_TAGS", "\n".join(tested_tags)))
+    ).replace("THE_RENDERED_TAGS", "\n".join(tested_tags)
+    ).replace("THE_SHINING_EXAMPLE", "\n".join([
+        "    %s" % line
+        for line in shining.read_text().split("\n")
+    ]))
+    )
 
 
 class Tests(unittest.TestCase):

@@ -10,8 +10,9 @@ test_readme.py
 # C extensions
 *.so
 
-# venv
+# venv and user config
 venv
+/config.py
 
 # Distribution / packaging
 .Python

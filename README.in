@@ -1,23 +1,26 @@
 # bulmate THE_VERSION_STRING
 
-bulmate is a library for creation of server-rendered dynamic, responsive html-pages using bulma as the css library, dominate for tag-rendering and cccp for the dynamic part, which consists of appending to live dom elements, prepending to live dom elements and replacing live dom elements using callbacks that fetch server rendered snippets. It uses the javascript libraries axios, jquery and fortawesome.
+bulmate is a library for creation of server-rendered dynamic, responsive html-pages using bulma as the css library, dominate for tag-rendering, and cccp for the dynamic part, which consists of appending to live dom elements, prepending to live dom elements and replacing live dom elements using callbacks that fetch server rendered snippets. It uses the javascript libraries axios, jquery and fontawesome.
 
-For the dynamic superpowers of cccp, refer to that project's [excellent documentation and examples](https://github.com/sloev/cccp).
+For more of the superpowers of cccp, refer to that project's [excellent documentation and examples](https://github.com/sloev/cccp).
 
 In order to know more about how the inner dynamics of the tag rendering works, refer to the [brilliant documentation](https://github.com/Knio/dominate) of dominate.
 
 Finally Bulma. There is no way You can use this library effectively without reading some of the [extraordinarily bright bulma documentation](https://bulma.io/documentation/).
 
+## Responsive rendering
+
 An reasonably comprehensive example in a flask view could look like this - it will showcase **section**, **hero**, **columns**, and **tile**.
 
 
-It should render like this
+### The wide version
 
 
 ![](example-v0.0.1.png)
 
 
-And when pinched a bit in the browser like this:
+### The tall version
+
 
 
 ![](example-responsive-v0.0.1.png)
@@ -90,6 +93,16 @@ Here is the current code
     	]),
         ]).render()
 
+## dynamic pages with server rendered snippets
+
+### A Shining example
+
+THE_SHINING_EXAMPLE
+
+### Only the wide version shown
+
+![](example-dynamic-v0.0.2.png)
+
 ## rendered tags, alphabetically
 
 Here is, for each tag, how it renders with no arguments, for example:
@@ -115,3 +128,6 @@ specifying the classes always at the end of the arguments.
 
 THE_RENDERED_TAGS
 
+## History
+
+THE_HISTORY
