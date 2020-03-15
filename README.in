@@ -10,6 +10,21 @@ Finally Bulma. There is no way You can use this library effectively without read
 
 An reasonably comprehensive example in a flask view could look like this - it will showcase **section**, **hero**, **columns**, and **tile**.
 
+
+It should render like this
+
+
+![](example-v0.0.1.png)
+
+
+And when pinched a bit in the browser like this:
+
+
+![](example-responsive-v0.0.1.png)
+
+
+Here is the current code
+
     @blueprint.route('/', methods=["GET"])
     def root():
         return t.html([
