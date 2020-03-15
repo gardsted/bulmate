@@ -1,0 +1,102 @@
+# bulmate THE_VERSION_STRING
+
+bulmate is a library for creation of server-rendered dynamic, responsive html-pages using bulma as the css library, dominate for tag-rendering and cccp for the dynamic part, which consists of appending to live dom elements, prepending to live dom elements and replacing live dom elements using callbacks that fetch server rendered snippets. It uses the javascript libraries axios, jquery and fortawesome.
+
+For the dynamic superpowers of cccp, refer to that project's [excellent documentation and examples](https://github.com/sloev/cccp).
+
+In order to know more about how the inner dynamics of the tag rendering works, refer to the [brilliant documentation](https://github.com/Knio/dominate) of dominate.
+
+Finally Bulma. There is no way You can use this library effectively without reading some of the [extraordinarily bright bulma documentation](https://bulma.io/documentation/).
+
+An reasonably comprehensive example in a flask view could look like this - it will showcase **section**, **hero**, **columns**, and **tile**.
+
+    @blueprint.route('/', methods=["GET"])
+    def root():
+        return t.html([
+    	t.head([bulmate.init(cors=True)]),
+    	t.body([
+    	    t.hero([
+    		t.hero_body([
+    		    t.container([
+    			t.h1("hero title", cls="title"),
+    			t.h2("hero subtitle", cls="subtitle"),
+    		    ])
+    		]),
+    	    ]),
+    	    t.section([
+    		t.columns([
+    		    t.column([t.notification("first column", cls="is-primary has-text-centered")]),
+    		    t.column([t.notification("second column", cls="is-primary has-text-centered")]),
+    		    t.column([t.notification("third column", cls="is-primary has-text-centered")]),
+    		    t.column([t.notification("fourth column", cls="is-primary has-text-centered")]),
+    		])
+    	    ]),
+    	    t.section([
+    		t.tile([
+    		    t.tile([
+    			t.tile([
+    			    t.tile([
+    				t.tile([
+    				    t.p("vertical?", cls="title"),
+    				    t.p("or what?", cls="subtitle"),
+    				], cls="is-child notification is-primary", tagname="article"),
+    				t.tile([
+    				    t.p("vertical?", cls="title"),
+    				    t.p("or what?", cls="subtitle"),
+    				], cls="is-child notification is-warning", tagname="article"),
+    			    ], cls="is-parent is-vertical"),
+    			    t.tile([
+    				t.tile([
+    				    t.p("middle", cls="title"),
+    				    t.p("with an image", cls="subtitle"),
+    				    t.image([t.img(src="https://bulma.io/images/placeholders/640x480.png")], cls="is-4by3"),
+    				], cls="is-child notification is-info", tagname="article"),
+    			    ], cls="is-parent"),
+    			]),
+    			t.tile([
+    			    t.tile([
+    				t.p("wide", cls="title"),
+    				t.p("aligned with right", cls="subtitle"),
+    				t.content("lotsatext"),
+    			    ], cls="is-child notification is-danger", tagname="article"),
+    			], cls="is-parent"),
+    		    ], cls="is-vertical is-8"),
+    		    t.tile([
+    			t.tile([
+    			    t.tile([
+    				t.p("tall tile", cls="title"),
+    				t.p("with much more text", cls="subtitle"),
+    				t.content("lotsamoretext"),
+    			    ], cls="is-child notification is-success", tagname="article"),
+    			] ),
+    		    ], cls="is-parent"),
+    		], cls="is-ancestor")
+    	    ]),
+    	]),
+        ]).render()
+
+## rendered tags, alphabetically
+
+Here is, for each tag, how it renders with no arguments, for example:
+
+    import bulmate.tags as t
+    t.panel().render()
+    t.panel(cls="is-success").render()
+    t.panel(cls=["is-success", "my-own-class"]).render()
+    t.panel(cls="is-success my-own-class").render()
+    t.panel(cls=["is-success", "my-own-class"], children=[t.p("some text")]).render()
+
+would produce
+
+    '<article class="panel"></article>'
+    '<article class="panel is-success"></article>'
+    '<article class="panel is-success my-own-class"></article>'
+    '<article class="panel is-success my-own-class"></article>'
+    '<article class="panel is-success my-own-class">\n  <p>some text</p>\n</article>'
+
+using the **children** keyword is an addition compared to vanilla dominate - it makes sense to be 
+able to transfer children as a keyword argument, as the example above seems bulky for bulma,
+specifying the classes always at the end of the arguments.
+
+THE_RENDERED_TAGS
+
